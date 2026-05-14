@@ -1,0 +1,51 @@
+---
+title: "Step-by-Step Analysis Walkthrough"
+format: html
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+# Overview
+
+This walkthrough shows how to run the analysis from start to finish.
+
+# Step 1 — Load packages
+
+```{r}
+library(tidyverse)
+library(sf)
+```
+
+# Step 2 — Import data
+
+```{r}
+df <- readRDS("data/example_data.rds")
+glimpse(df)
+```
+
+# Step 3 — Clean variables
+
+```{r}
+df_clean <- df %>%
+  mutate(GEOID = as.character(GEOID))
+```
+
+# Step 4 — Run analysis
+
+```{r}
+results <- df_clean %>%
+  group_by(GEOID) %>%
+  summarise(rate = sum(Count) / sum(POP_EST))
+```
+
+# Step 5 — Save output
+
+```{r}
+saveRDS(results, "outputs/results.rds")
+```
+
+# Interpretation
+
+The final output is a tract-level rate table that can be mapped or used in later models.
